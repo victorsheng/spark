@@ -1,165 +1,142 @@
-# Apache Spark
+# Spark 源码深度学习计划
 
-Spark is a unified analytics engine for large-scale data processing. It provides
-high-level APIs in Scala, Java, Python, and R (Deprecated), and an optimized engine that
-supports general computation graphs for data analysis. It also supports a
-rich set of higher-level tools including Spark SQL for SQL and DataFrames,
-pandas API on Spark for pandas workloads, MLlib for machine learning, GraphX for graph processing,
-and Structured Streaming for stream processing.
+## 📚 学习计划概述
 
-- Official version: <https://spark.apache.org/>
-- Development version: <https://apache.github.io/spark/>
+本学习计划专为有9年大数据开发经验的工程师设计，旨在深入理解 Spark 源码，提升代码设计能力，并为技术面试做准备。
 
-[![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_main.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_main.yml)
-[![PySpark Coverage](https://codecov.io/gh/apache/spark/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/spark)
-[![PyPI Downloads](https://static.pepy.tech/personalized-badge/pyspark?period=month&units=international_system&left_color=black&right_color=orange&left_text=PyPI%20downloads)](https://pypi.org/project/pyspark/)
+### 🎯 学习目标
+- 深入理解 Spark 的核心设计思想和架构模式
+- 掌握分布式计算框架的关键技术实现
+- 能够分析 Spark 源码中的设计模式和最佳实践
+- 具备向 Spark 社区贡献代码的能力
 
+### 📋 学习文件结构
 
-## Online Documentation
-
-You can find the latest Spark documentation, including a programming
-guide, on the [project web page](https://spark.apache.org/documentation.html).
-This README file only contains basic setup instructions.
-
-## Build Pipeline Status
-
-| Branch     | Status                                                                                                                                                                                                          |
-|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| master     | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/release.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/release.yml)                                               |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_java21.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_java21.yml)                                     |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_non_ansi.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_non_ansi.yml)                                 |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_uds.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_uds.yml)                                           |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_rockdb_as_ui_backend.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_rockdb_as_ui_backend.yml)         |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_maven.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_maven.yml)                                       |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_maven_java21.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_maven_java21.yml)                         |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_maven_java21_macos15.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_maven_java21_macos15.yml)         |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_maven_java21_arm.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_maven_java21_arm.yml)                 |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_coverage.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_coverage.yml)                          |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_pypy3.10.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_pypy3.10.yml)                   |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.10.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.10.yml)                           |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.11_classic_only.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.11_classic_only.yml) |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.11_arm.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.11_arm.yml)                   |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.11_macos.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.11_macos.yml)               |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_numpy_2.1.3.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_numpy_2.1.3.yml)             |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.12.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.12.yml)                           |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.13.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.13.yml)                           |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_3.13_nogil.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_3.13_nogil.yml)               |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_minimum.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_minimum.yml)                     |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_ps_minimum.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_ps_minimum.yml)               |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_connect35.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_connect35.yml)                 |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_python_connect.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_python_connect.yml)                     |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_sparkr_window.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_sparkr_window.yml)                       |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/publish_snapshot.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/publish_snapshot.yml)                             |
-| branch-4.0 | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40.yml)                                 |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_java21.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_java21.yml)                   |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_non_ansi.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_non_ansi.yml)               |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_maven.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_maven.yml)                     |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_maven_java21.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_maven_java21.yml)       |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_python.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_python.yml)                   |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch40_python_pypy3.10.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch40_python_pypy3.10.yml) |
-| branch-3.5 | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch35.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch35.yml)                                 |
-|            | [![GitHub Actions Build](https://github.com/apache/spark/actions/workflows/build_branch35_python.yml/badge.svg)](https://github.com/apache/spark/actions/workflows/build_branch35_python.yml)                   |
-
-
-## Building Spark
-
-Spark is built using [Apache Maven](https://maven.apache.org/).
-To build Spark and its example programs, run:
-
-```bash
-./build/mvn -DskipTests clean package
+```
+Spark源码学习计划/
+├── 00_学习路线图(Roadmap).md          # 总体学习路线和时间规划
+├── 01_前置知识(Prerequisites).md      # 学习前必须掌握的基础知识
+├── 02_核心流程(Core_Flow).md          # 环境搭建和源码调试流程
+├── 03_架构与模块(Architecture).md     # Spark 整体架构和核心模块分析
+├── 04_实践与贡献(Practice).md         # 动手实践和社区贡献指导
+└── README.md                          # 本文件，总体说明
 ```
 
-(You do not need to do this if you downloaded a pre-built package.)
+## 🚀 快速开始
 
-More detailed documentation is available from the project site, at
-["Building Spark"](https://spark.apache.org/docs/latest/building-spark.html).
+### 第一阶段：环境准备 (1-2周)
+1. 阅读 `00_学习路线图(Roadmap).md` 了解整体计划
+2. 检查 `01_前置知识(Prerequisites).md` 中的基础知识
+3. 按照 `02_核心流程(Core_Flow).md` 搭建开发环境
+4. 成功编译并运行 Spark 源码
 
-For general development tips, including info on developing Spark using an IDE, see ["Useful Developer Tools"](https://spark.apache.org/developer-tools.html).
+### 第二阶段：核心模块学习 (3-4周)
+1. 学习 `03_架构与模块(Architecture).md` 中的架构分析
+2. 重点理解 Spark Core 模块
+3. 深入 RDD 抽象和调度机制
+4. 分析内存管理和序列化机制
 
-## Interactive Scala Shell
+### 第三阶段：高级特性 (2-3周)
+1. 学习 Spark SQL 和 Catalyst 优化器
+2. 理解 Spark Streaming 和 Structured Streaming
+3. 分析性能优化和容错机制
+4. 掌握 Shuffle 和网络通信实现
 
-The easiest way to start using Spark is through the Scala shell:
+### 第四阶段：实践应用 (2-3周)
+1. 按照 `04_实践与贡献(Practice).md` 进行动手实践
+2. 实现自定义 RDD 和算子
+3. 参与社区讨论和贡献代码
+4. 总结学习心得和最佳实践
 
-```bash
-./bin/spark-shell
-```
+## 📖 学习建议
 
-Try the following command, which should return 1,000,000,000:
+### 学习方法
+- **循序渐进**：不要急于求成，每个阶段都要确保理解透彻
+- **动手实践**：理论结合实践，多动手调试和修改代码
+- **记录总结**：建立学习笔记，记录关键概念和设计思路
+- **社区参与**：积极参与 Spark 社区讨论，向他人学习
 
-```scala
-scala> spark.range(1000 * 1000 * 1000).count()
-```
+### 时间安排
+- **总计时间**：8-12周（根据个人基础和学习时间调整）
+- **每日学习**：建议每天投入2-4小时
+- **周末复习**：利用周末时间进行阶段性总结和复习
 
-## Interactive Python Shell
+### 学习工具
+- **IDE**：推荐使用 IntelliJ IDEA
+- **调试工具**：JProfiler、VisualVM
+- **版本控制**：Git
+- **文档工具**：Markdown 编辑器
 
-Alternatively, if you prefer Python, you can use the Python shell:
+## 🔗 重要资源
 
-```bash
-./bin/pyspark
-```
+### 官方资源
+- [Spark 官方文档](https://spark.apache.org/docs/latest/)
+- [Spark GitHub 仓库](https://github.com/apache/spark)
+- [Spark JIRA](https://issues.apache.org/jira/browse/SPARK)
 
-And run the following command, which should also return 1,000,000,000:
+### 社区资源
+- [Spark 用户邮件列表](https://spark.apache.org/community.html#mailing-lists)
+- [Stack Overflow Spark 标签](https://stackoverflow.com/questions/tagged/apache-spark)
+- [Spark Summit](https://spark-summit.org/)
 
-```python
->>> spark.range(1000 * 1000 * 1000).count()
-```
+### 推荐书籍
+- 《Spark 权威指南》- Bill Chambers, Matei Zaharia
+- 《Spark 快速大数据分析》- Holden Karau
+- 《Scala 编程》- Martin Odersky
 
-## Example Programs
+## 📝 学习记录
 
-Spark also comes with several sample programs in the `examples` directory.
-To run one of them, use `./bin/run-example <class> [params]`. For example:
+### 学习进度跟踪
+建议创建一个学习进度表，记录：
+- 每日学习内容
+- 遇到的问题和解决方案
+- 学习心得和感悟
+- 下周学习计划
 
-```bash
-./bin/run-example SparkPi
-```
+### 知识体系构建
+在学习过程中，逐步构建自己的知识体系：
+- 核心概念图
+- 模块关系图
+- 设计模式总结
+- 最佳实践清单
 
-will run the Pi example locally.
+## 🎉 学习成果
 
-You can set the MASTER environment variable when running examples to submit
-examples to a cluster. This can be spark:// URL,
-"yarn" to run on YARN, and "local" to run
-locally with one thread, or "local[N]" to run locally with N threads. You
-can also use an abbreviated class name if the class is in the `examples`
-package. For instance:
+完成本学习计划后，您将能够：
 
-```bash
-MASTER=spark://host:7077 ./bin/run-example SparkPi
-```
+### 技术能力
+- 深入理解 Spark 内部实现原理
+- 掌握分布式计算框架的设计思想
+- 具备分析和优化 Spark 应用的能力
+- 能够设计和实现自定义的分布式算法
 
-Many of the example programs print usage help if no params are given.
+### 面试准备
+- 能够回答 Spark 相关的深度技术问题
+- 具备分析复杂系统架构的能力
+- 掌握分布式系统设计的最佳实践
+- 具备开源项目贡献经验
 
-## Running Tests
+### 职业发展
+- 提升代码设计和架构能力
+- 增强技术深度和广度
+- 建立技术影响力
+- 为职业发展奠定坚实基础
 
-Testing first requires [building Spark](#building-spark). Once Spark is built, tests
-can be run using:
+## 🤝 参与贡献
 
-```bash
-./dev/run-tests
-```
+学习过程中，欢迎：
+1. **提出问题**：在学习过程中遇到的问题
+2. **分享经验**：学习心得和最佳实践
+3. **改进计划**：对学习计划的建议和改进
+4. **社区贡献**：向 Spark 社区贡献代码
 
-Please see the guidance on how to
-[run tests for a module, or individual tests](https://spark.apache.org/developer-tools.html#individual-tests).
+## 📞 联系方式
 
-There is also a Kubernetes integration test, see resource-managers/kubernetes/integration-tests/README.md
+如果您在学习过程中遇到问题或需要帮助，可以：
+- 在 GitHub 上提交 Issue
+- 发送邮件到相关邮件列表
+- 在社区论坛中提问
 
-## A Note About Hadoop Versions
+---
 
-Spark uses the Hadoop core library to talk to HDFS and other Hadoop-supported
-storage systems. Because the protocols have changed in different versions of
-Hadoop, you must build Spark against the same version that your cluster runs.
-
-Please refer to the build documentation at
-["Specifying the Hadoop Version and Enabling YARN"](https://spark.apache.org/docs/latest/building-spark.html#specifying-the-hadoop-version-and-enabling-yarn)
-for detailed guidance on building for a particular distribution of Hadoop, including
-building for particular Hive and Hive Thriftserver distributions.
-
-## Configuration
-
-Please refer to the [Configuration Guide](https://spark.apache.org/docs/latest/configuration.html)
-in the online documentation for an overview on how to configure Spark.
-
-## Contributing
-
-Please review the [Contribution to Spark guide](https://spark.apache.org/contributing.html)
-for information on how to get started contributing to the project.
+**祝您学习愉快，早日成为 Spark 源码专家！** 🚀
